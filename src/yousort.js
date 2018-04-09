@@ -4,7 +4,9 @@ class YouSort {
   constructor() {
     this.logPrefix = '[YouSort]';
     this.playlistKeyPrefix = 'playlist-';
-    this.storage = {};
+    this.storage = {
+      rules: [],
+    };
     this.log('Loaded.');
   }
 

@@ -6,7 +6,34 @@
       </template>
 
       <tab name="Rules">
-        <h3>Rules not implemented</h3>
+        <h3>{{rules.length}} rules</h3>
+        <button type="button" @click="addRule">Add rule</button>
+        <ol id="rules-list">
+          <li v-for="(rule, i) of rules" :key="i">
+            <div>
+              <label :for="`rule-name-${i}`">Name</label>
+              <input type="text" :id="`rule-name-${i}`" v-model="rule.name" placeholder="Rule name"/>
+            </div>
+            <div>
+              <h4>Selectors</h4>
+              <ol>
+                <li v-for="(selector, j) of rule.selectors" :key="j">
+                  <div>
+                    <label :for="`rule-specificity-${i}-${j}`">Specificity</label>
+                    <input type="number" :id="`rule-specificity-${i}-${j}`" min="0" step="1" :max="maxSpecificity" v-model.number="selector.specificity" placeholder="Selector specificity"/>
+                  </div>
+                  <div>
+                    <ol>
+                      <li v-for="(criterion, k) of selector.criteria" :key="k">
+                        <div>Criterion {{k}}... TODO</div>
+                      </li>
+                    </ol>
+                  </div>
+                </li>
+              </ol>
+            </div>
+          </li>
+        </ol>
       </tab>
       <tab name="Authors">
         <h3>{{authors.length}} authors</h3>
@@ -74,6 +101,7 @@
 
     data: () => ({
       storage: {},
+      rules: [],
     }),
 
     computed: {
@@ -91,6 +119,12 @@
       authors() {
         return (this.storage && this.storage.authors)
           || [];
+      },
+
+      maxSpecificity() {
+        const selectors = _.flatten(this.rules.map(r => r.selectors));
+        const specificities = selectors.map(s => s.specificity);
+        return _.max(specificities) || 0;
       },
 
       totalDuration() {
@@ -122,9 +156,25 @@
       updateStorage() {
         youSort.updateStorage().then(() => {
           this.storage = _.assign({}, this.storage, youSort.storage);
+          this.rules = this.storage.rules;
           youSort.mergeAuthors().then(() => {
             this.storage = _.assign({}, this.storage, youSort.storage);
           });
+        });
+      },
+
+      addRule() {
+        this.rules.push({
+          name: 'New rule',
+          selectors: [{
+            specificity: this.maxSpecificity + 1,
+            criteria: [],
+          }],
+          orderings: [{
+            by: 'videoName',
+            dir: 'asc',
+          }],
+          isValid: false,
         });
       },
     },
@@ -193,6 +243,17 @@
         &:hover {
           background: #fdd;
         }
+      }
+    }
+  }
+  #rules-list {
+    li {
+      background: rgba(0, 0, 0, 0.05);
+      padding: 4px;
+      margin-top: 4px;
+
+      &:first-child {
+        margin-top: 0;
       }
     }
   }
