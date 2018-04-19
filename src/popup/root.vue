@@ -15,22 +15,7 @@
         <h3>Current: {{currentPlaylist ? currentPlaylist.name : '(none)'}}</h3>
       </tab>
       <tab name="Videos">
-        <h3>{{videos.length}} videos</h3>
-        <h4>{{totalDuration}} of content</h4>
-        <table>
-          <tr>
-            <th>#</th>
-            <th>Time</th>
-            <th>Author</th>
-            <th>Name</th>
-          </tr>
-          <tr v-for="video of videos" :key="video.index">
-            <td class="align-right">{{video.index}}</td>
-            <td class="align-right">{{video.videoTime}}</td>
-            <td>{{video.authorName}}</td>
-            <td>{{video.videoName}}</td>
-          </tr>
-        </table>
+        <videos-tab :videos="videos" />
       </tab>
       <tab name="Settings">
         <h3>Settings not implemented</h3>
@@ -46,17 +31,9 @@
   import Tab from '../controls/tab.vue';
   import RulesTab from '../controls/rules-tab.vue';
   import AuthorsTab from '../controls/authors-tab.vue';
+  import VideosTab from '../controls/videos-tab.vue';
 
   const youSort = new YouSort();
-
-  const timestampToSeconds = ts => {
-    if (!ts) return 0;
-    const parts = ts.split(':');
-    const seconds = Number(parts.pop()) || 0;
-    const minutes = Number(parts.pop()) || 0;
-    const hours = Number(parts.pop()) || 0;
-    return seconds + (minutes * 60) + (hours * 60 * 60);
-  };
 
   export default {
     components: {
@@ -64,6 +41,7 @@
       Tab,
       RulesTab,
       AuthorsTab,
+      VideosTab,
     },
 
     data: () => ({
@@ -86,30 +64,6 @@
       authors() {
         return (this.storage && this.storage.authors)
           || [];
-      },
-
-      totalDuration() {
-        const totalSeconds = this.videos.reduce((acc, cur) => acc + timestampToSeconds(cur.videoTime), 0);
-        const secondsPerMinute = 60;
-        const secondsPerHour = 60 * secondsPerMinute;
-        const secondsPerDay = 24 * secondsPerHour;
-
-        let remainingSeconds = totalSeconds;
-
-        const days = Math.floor(remainingSeconds / secondsPerDay);
-        remainingSeconds -= days * secondsPerDay;
-        const hours = Math.floor(remainingSeconds / secondsPerHour);
-        remainingSeconds -= hours * secondsPerHour;
-        const minutes = Math.floor(remainingSeconds / secondsPerMinute);
-        remainingSeconds -= minutes * secondsPerMinute;
-        const seconds = remainingSeconds;
-
-        let totalDuration = '';
-        totalDuration += days ? `${days}d` : '';
-        totalDuration += hours ? `${hours}h` : '';
-        totalDuration += minutes ? `${minutes}m` : '';
-        totalDuration += seconds ? `${seconds}s` : '';
-        return totalDuration.length ? totalDuration : '0s';
       },
     },
 
@@ -135,6 +89,7 @@
   * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
   }
   #popup {
     width: 800px;
@@ -147,6 +102,9 @@
     color: #f00;
     margin: 0;
     padding: 0;
+  }
+  ol, ul {
+    list-style: none;
   }
   table {
     border-collapse: collapse;
@@ -192,15 +150,19 @@
       }
     }
   }
-  #rules-list {
-    li {
-      background: rgba(0, 0, 0, 0.05);
-      padding: 4px;
-      margin-top: 4px;
-
-      &:first-child {
-        margin-top: 0;
-      }
-    }
+  label {
+    line-height: 24px;
+    background: #ddd;
+  }
+  label, input, select, button {
+    padding-left: 4px;
+    padding-right: 4px;
+    height: 24px;
+    min-width: 150px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  button + * {
+    margin-top: 8px;
   }
 </style>
