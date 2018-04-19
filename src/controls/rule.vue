@@ -7,27 +7,27 @@
     <div>
         <h4>Selectors</h4>
         <ol>
-        <li v-for="(selector, j) of rule.selectors" :key="j">
+          <li v-for="(selector, j) of rule.selectors" :key="j">
             <div>
-            <label :for="`rule-specificity-${rule.ruleId}-${j}`">Specificity</label>
-            <input
+              <label :for="`rule-specificity-${rule.ruleId}-${j}`">Specificity</label>
+              <input
                 type="number"
-                :id="`rule-specificity-${i}-${j}`"
+                :id="`rule-specificity-${rule.ruleId}-${j}`"
                 min="0"
                 step="1"
                 :max="maxSpecificity"
                 v-model.number="selector.specificity"
                 placeholder="Selector specificity"
-            />
+              />
             </div>
             <div>
-            <ol>
+              <ol>
                 <li v-for="(criterion, k) of selector.criteria" :key="k">
-                <div>Criterion {{k}}... TODO</div>
+                  <div>Criterion {{k}}... TODO</div>
                 </li>
-            </ol>
+              </ol>
             </div>
-        </li>
+          </li>
         </ol>
     </div>
   </li>
