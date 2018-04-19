@@ -6,47 +6,10 @@
       </template>
 
       <tab name="Rules">
-        <h3>{{rules.length}} rules</h3>
-        <button type="button" @click="addRule">Add rule</button>
-        <ol id="rules-list">
-          <li v-for="(rule, i) of rules" :key="i">
-            <div>
-              <label :for="`rule-name-${i}`">Name</label>
-              <input type="text" :id="`rule-name-${i}`" v-model="rule.name" placeholder="Rule name"/>
-            </div>
-            <div>
-              <h4>Selectors</h4>
-              <ol>
-                <li v-for="(selector, j) of rule.selectors" :key="j">
-                  <div>
-                    <label :for="`rule-specificity-${i}-${j}`">Specificity</label>
-                    <input type="number" :id="`rule-specificity-${i}-${j}`" min="0" step="1" :max="maxSpecificity" v-model.number="selector.specificity" placeholder="Selector specificity"/>
-                  </div>
-                  <div>
-                    <ol>
-                      <li v-for="(criterion, k) of selector.criteria" :key="k">
-                        <div>Criterion {{k}}... TODO</div>
-                      </li>
-                    </ol>
-                  </div>
-                </li>
-              </ol>
-            </div>
-          </li>
-        </ol>
+        <rules-tab :rules="rules" />
       </tab>
       <tab name="Authors">
-        <h3>{{authors.length}} authors</h3>
-        <table>
-          <tr>
-            <th>Name</th>
-            <th>URL</th>
-          </tr>
-          <tr v-for="author of authors" :key="author.authorUrl">
-            <td>{{author.authorName}}</td>
-            <td>{{author.authorUrl}}</td>
-          </tr>
-        </table>
+        <authors-tab :authors="authors" />
       </tab>
       <tab name="Playlists">
         <h3>Current: {{currentPlaylist ? currentPlaylist.name : '(none)'}}</h3>
@@ -81,6 +44,8 @@
   import YouSort from '../yousort';
   import Tabs from '../controls/tabs.vue';
   import Tab from '../controls/tab.vue';
+  import RulesTab from '../controls/rules-tab.vue';
+  import AuthorsTab from '../controls/authors-tab.vue';
 
   const youSort = new YouSort();
 
@@ -97,6 +62,8 @@
     components: {
       Tabs,
       Tab,
+      RulesTab,
+      AuthorsTab,
     },
 
     data: () => ({
@@ -119,12 +86,6 @@
       authors() {
         return (this.storage && this.storage.authors)
           || [];
-      },
-
-      maxSpecificity() {
-        const selectors = _.flatten(this.rules.map(r => r.selectors));
-        const specificities = selectors.map(s => s.specificity);
-        return _.max(specificities) || 0;
       },
 
       totalDuration() {
@@ -162,21 +123,6 @@
           });
         });
       },
-
-      addRule() {
-        this.rules.push({
-          name: 'New rule',
-          selectors: [{
-            specificity: this.maxSpecificity + 1,
-            criteria: [],
-          }],
-          orderings: [{
-            by: 'videoName',
-            dir: 'asc',
-          }],
-          isValid: false,
-        });
-      },
     },
 
     created() {
@@ -185,7 +131,7 @@
   };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
   * {
     margin: 0;
     padding: 0;
