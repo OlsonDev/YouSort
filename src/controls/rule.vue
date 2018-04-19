@@ -3,6 +3,7 @@
     <div>
         <label :for="`rule-name-${rule.ruleId}`">Name</label>
         <input type="text" :id="`rule-name-${rule.ruleId}`" v-model="rule.name" placeholder="Rule name"/>
+        <button type="button" @click="removeRule">Remove rule</button>
     </div>
     <div>
       <h4>Orderings</h4>
@@ -103,6 +104,10 @@
     },
 
     methods: {
+      removeRule() {
+        this.$emit('remove');
+      },
+
       addOrdering() {
         this.rule.orderings.push({
           by: 'videoName',

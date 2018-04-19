@@ -3,7 +3,13 @@
     <h3>{{rules.length}} rules</h3>
     <button type="button" @click="addRule">Add rule</button>
     <ol id="rules-list">
-        <rule v-for="rule of rules" :key="rule.id" :rule="rule" :max-specificity="maxSpecificity"/>
+        <rule
+          v-for="(rule, i) of rules"
+          :key="rule.id"
+          :rule="rule"
+          :max-specificity="maxSpecificity"
+          @remove="removeRule(i)"
+        />
     </ol>
   </div>
 </template>
@@ -57,6 +63,10 @@
           isValid: false,
         });
       },
+
+      removeRule(index) {
+        this.rules.splice(index, 1);
+      },
     },
   };
 </script>
@@ -77,6 +87,11 @@
 
       &:first-child {
         margin-top: 0;
+      }
+
+      &:nth-child(2n) {
+        background: #f1f1ff;
+        border: 1px solid #99c;
       }
     }
   }

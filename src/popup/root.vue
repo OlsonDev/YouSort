@@ -152,7 +152,7 @@
   }
   label {
     line-height: 24px;
-    background: #ddd;
+    background: rgba(0, 0, 0, 0.08);
   }
   label, input, select, button {
     padding-left: 4px;
