@@ -11,9 +11,7 @@ module.exports = {
     popup: resolve('./popup'),
     options: resolve('./options'),
     content: resolve('./content'),
-    devtools: resolve('./devtools'),
     background: resolve('./backend'),
-    panel: resolve('./devtools/panel'),
   },
   output: {
     path: path.join(__dirname, '..', 'build'),
@@ -92,7 +90,6 @@ module.exports = {
     htmlPage('home', 'app', ['tab']),
     htmlPage('popup', 'popup', ['popup']),
     htmlPage('panel', 'panel', ['panel']),
-    htmlPage('devtools', 'devtools', ['devtools']),
     htmlPage('options', 'options', ['options']),
     htmlPage('background', 'background', ['background']),
     new CopyWebpackPlugin([{ from: path.join(__dirname, '..', 'static') }]),
