@@ -158,7 +158,7 @@
     padding-left: 4px;
     padding-right: 4px;
     height: 24px;
-    min-width: 150px;
+    min-width: 180px;
     display: inline-block;
     vertical-align: middle;
   }
