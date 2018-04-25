@@ -1,16 +1,17 @@
 <template>
   <div>
     <h3>{{authors.length}} authors</h3>
-    <table>
-      <tr>
-        <th>Name</th>
-        <th>URL</th>
-      </tr>
-      <tr v-for="author of authors" :key="author.authorUrl">
-        <td>{{author.authorName}}</td>
-        <td>{{author.authorUrl}}</td>
-      </tr>
-    </table>
+    <v-data-table
+      :headers="headers"
+      :items="authors"
+      hide-actions
+      class="elevation-1"
+    >
+      <template slot="items" slot-scope="props">
+        <td>{{ props.item.authorName }}</td>
+        <td>{{ props.item.authorUrl }}</td>
+      </template>
+    </v-data-table>
   </div>
 </template>
 
@@ -21,6 +22,10 @@
     },
 
     data: () => ({
+      headers: [
+        { text: 'Name', value: 'authorName' },
+        { text: 'URL', value: 'authorUrl' },
+      ],
     }),
 
     computed: {

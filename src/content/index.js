@@ -57,6 +57,11 @@ class YouSortContent extends YouSort {
           authorUrl: this.getHref(elem, '.pl-video-owner a', shouldLogFailure),
           videoTime: this.getText(elem, '.pl-video-time .timestamp', shouldLogFailure),
         };
+
+        video.videoTimeSeconds = video.videoTime
+          ? YouSort.timestampToSeconds(video.videoTime)
+          : 0;
+
         return video;
       });
   }

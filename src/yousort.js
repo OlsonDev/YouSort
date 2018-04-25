@@ -68,6 +68,15 @@ class YouSort {
   static getPlaylistAuthors(playlist) {
     return _.map(_.uniqBy(playlist.videos, 'authorUrl'), _.partialRight(_.pick, ['authorUrl', 'authorName']));
   }
+
+  static timestampToSeconds(ts) {
+    if (!ts) return 0;
+    const parts = ts.split(':');
+    const seconds = Number(parts.pop()) || 0;
+    const minutes = Number(parts.pop()) || 0;
+    const hours = Number(parts.pop()) || 0;
+    return seconds + (minutes * 60) + (hours * 60 * 60);
+  }
 }
 
 export default YouSort;
